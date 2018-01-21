@@ -1,0 +1,138 @@
+---
+title: "Linear Programming Explaination"
+author: "Vineeth Reddy.M"
+date: "January 4, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Linear Programming
+
+Linear Programming is a mathematical technique for maximizing or minimizing a 
+linear function of several variables, such as output or cost.
+
+Linear Programmings allows to model a large variety of situations 
+with a simple framework.
+
+###Real Life Usage of Linear Programming
+
+In real world linear programming is a part of an important mathematics area called 
+Optimization techniques.
+
+Optimizing the operations of transportation networks to ensure the most efficient
+patterns of transporting goods and people,in its most basic sense finding out what 
+trains should go where and when.
+
+Minimizing production cost at a manufacturing facility by determining the optimal
+balance of production according to resources and customer demand.
+
+Maximizing a companys's profits by detrmining the best possible combination of
+activities to bring in the most money at the least cost.
+
+Reducing risk in a potentially hazardous operation by determining the best possible 
+combination of human and other resources.
+
+####Explaination of Linear Programming with an Example
+
+Example :
+
+A car company produces two models, model A and model B. Long-term projections indicate 
+an expected demand of at least 100 model A cars and 80 model B cars each day. 
+Because of limitations on production capacity, no more than 200 model A cars and 
+170 model B cars can be made daily. To satisfy a shipping contract, a total of 
+at least 200 cars much be shipped each day. If each model A car sold results in a 
+$2000 loss, but each model B car produces a $5000 profit, how many of each type 
+should be made daily to maximize net profits?
+
+
+Objective Function : The profit or cost function to be maximized or minimized is
+called the Objective Function.
+
+In this case we have profit so we need to maximize it.
+
+Profit = -2000x + 5000y
+
+A model cars expected demand is atleast 100 cars per day
+
+A >= 100
+
+A model cars maximum production capacity per day is 200
+
+A <= 200
+
+B model cars expected demand is atleast 80 cars per day
+
+B >= 80
+
+B model cars maximum production capacity per day is 170
+
+B <= 170
+
+For satisfying the shipping contract, atleast 200 cars must be shipped every day
+
+A + B >= 200
+
+
+Based on these constraints we will find Maximum Profit and for what values of A & B
+we will get maximum profit using Linear Programming.
+
+We will define different vectors for the objective function,constraints of R.H.S,directions and a matrix for constraints of L.H.S.
+
+Mathematical Method for solving the problem:
+
+![](capture.PNG)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+From the above graph we can infer that the white region which is in between all the co-ordinates indicates the feasible region.
+
+The number of cars which can be manufactured should be in that feasible region co-ordinate points.
+
+Therefore graphically we can find out that the number of cars which can be manufactured for the maximum profit is the point with co-ordinates(100,170).
+
+
+```{r }
+library(lpSolve)
+
+#defining parameters 
+#Objective Function 
+obj.func <- c(-2000,5000)
+
+#Constraints on L.H.S
+constr.LHS <- matrix(c(1,0,1,0,0,1,0,1,1,1),nrow=5,byrow=TRUE)
+
+#Directions for the constraints
+constr.dir <- c(">=","<=",">=","<=",">=")
+
+#Constraints on R.H.S
+constr.RHS <- c(100,200,80,170,200)
+
+#Maximum profit which can be achieved with the given data is?
+lp("max",obj.func,constr.LHS,constr.dir,constr.RHS,compute.sens=TRUE)
+
+#Values of A & B to get the maximum profit is?
+prod.sol <- lp("max",obj.func,constr.LHS,constr.dir,constr.RHS,compute.sens=TRUE)
+prod.sol$solution  
+
+
+```
+
+
+Therefore we will get a maximum profit of 6,50,000 for manufacturaing 100 A model cars and 170 B model cars i.e., A=100,B=170.
+
